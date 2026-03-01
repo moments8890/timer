@@ -142,6 +142,8 @@ const timerDisplayB = document.getElementById('timer-b');
 const durationA = document.getElementById('duration-a');
 const durationB = document.getElementById('duration-b');
 const resetDebateBtn = document.getElementById('reset-debate-btn');
+const debateModeBtn = document.getElementById('debate-mode-btn');
+const debateContainer = document.querySelector('.debate-container');
 
 function updateDebateDisplay() {
     timerDisplayA.textContent = formatTime(timeLeftA);
@@ -255,6 +257,26 @@ function resetDebate() {
     updateDebateDisplay();
 }
 
+// --- Config / Timer mode toggle ---
+function setDebateMode(mode) {
+    debateContainer.dataset.mode = mode;
+    if (mode === 'timer') {
+        debateModeBtn.textContent = '◀ Setup';
+        document.getElementById('left-label').contentEditable = 'false';
+        document.getElementById('right-label').contentEditable = 'false';
+        resetDebate();
+    } else {
+        debateModeBtn.textContent = '▶ Start Timer';
+        document.getElementById('left-label').contentEditable = 'true';
+        document.getElementById('right-label').contentEditable = 'true';
+        pauseDebate();
+    }
+}
+
+debateModeBtn.addEventListener('click', () => {
+    setDebateMode(debateContainer.dataset.mode === 'config' ? 'timer' : 'config');
+});
+
 // Touch vs desktop interaction
 const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 const idleStatus = isTouchDevice ? "Tap to start" : "Hover to start";
@@ -266,8 +288,6 @@ function pauseDebateAndReset() {
     sideA.querySelector('.status').textContent = idleStatus;
     sideB.querySelector('.status').textContent = idleStatus;
 }
-
-const debateContainer = document.querySelector('.debate-container');
 
 if (!isTouchDevice) {
     sideA.addEventListener('mouseenter', startSideA);

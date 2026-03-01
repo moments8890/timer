@@ -238,6 +238,46 @@ input[type="text"] {
     color: #7f8c8d;
 }
 
+/* Config mode: show labels + duration, hide timer */
+.debate-container[data-mode="config"] .time-display,
+.debate-container[data-mode="config"] .status {
+    display: none;
+}
+
+/* Timer mode: hide duration inputs; label becomes non-editable */
+.debate-container[data-mode="timer"] .side-duration {
+    display: none;
+}
+
+.debate-container[data-mode="timer"] h3 {
+    cursor: default;
+    border-bottom: none;
+}
+
+/* Header actions row */
+.header-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.mode-btn {
+    padding: 8px 20px;
+    font-size: 1rem;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mode-btn:hover {
+    background-color: #219a52;
+}
+
 .side h3[contenteditable] {
     cursor: text;
     outline: none;

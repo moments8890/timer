@@ -38,13 +38,12 @@
                     <div class="usage-guide">
                         <p><strong>Controls:</strong> Hover over a side to start its timer | <kbd>←</kbd> Left side | <kbd>→</kbd> Right side | <kbd>Space</kbd> or <kbd>Esc</kbd> Pause</p>
                     </div>
-                    <div class="settings">
-                        <div class="timer-settings">
-                            <button id="reset-debate-btn">Reset Debate</button>
-                        </div>
+                    <div class="header-actions">
+                        <button id="debate-mode-btn" class="mode-btn">▶ Start Timer</button>
+                        <button id="reset-debate-btn">Reset</button>
                     </div>
                 </div>
-                <div class="debate-container">
+                <div class="debate-container" data-mode="config">
                     <div class="side left-side" id="side-a">
                         <h3 contenteditable="true" id="left-label">不应该</h3>
                         <div class="time-display" id="timer-a">04:00</div>
