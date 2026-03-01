@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="nav">
+        <button class="nav-btn active" data-section="standard">Standard Timer</button>
+        <button class="nav-btn" data-section="free-debate">Free Debate</button>
+    </nav>
+
+    <main>
+        <section id="standard" class="section active">
+            <div class="timer-display" id="standardDisplay">05:00</div>
+            <div class="controls">
+                <button id="startBtn">Start</button>
+                <button id="pauseBtn">Pause</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+            <div class="duration-input">
+                <label for="durationInput">Duration (minutes):</label>
+                <input type="number" id="durationInput" min="1" max="60" value="5">
+            </div>
+        </section>
+
+        <section id="free-debate" class="section">
+            <div class="debate-container">
+                <div class="debate-side left" id="leftSide">
+                    <div class="side-label">
+                        <input type="text" class="label-input" id="leftLabel" value="不应该" maxlength="20">
+                    </div>
+                    <div class="timer-display" id="leftDisplay">04:00</div>
+                    <div class="status" id="leftStatus">Waiting</div>
+                    <div class="side-timer-input">
+                        <label for="leftDuration">Duration (minutes):</label>
+                        <input type="number" id="leftDuration" min="1" max="60" value="4">
+                    </div>
+                </div>
+
+                <div class="debate-side right" id="rightSide">
+                    <div class="side-label">
+                        <input type="text" class="label-input" id="rightLabel" value="应该" maxlength="20">
+                    </div>
+                    <div class="timer-display" id="rightDisplay">04:00</div>
+                    <div class="status" id="rightStatus">Waiting</div>
+                    <div class="side-timer-input">
+                        <label for="rightDuration">Duration (minutes):</label>
+                        <input type="number" id="rightDuration" min="1" max="60" value="4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="keyboard-guide">
+                <p><strong>Keyboard Controls:</strong></p>
+                <p>← / → : Select side | Space/Esc : Pause</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
