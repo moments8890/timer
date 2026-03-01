@@ -254,6 +254,18 @@ input[type="text"] {
     border-bottom: none;
 }
 
+/* In timer mode, shrink the footer button */
+.debate-container[data-mode="timer"] ~ .debate-footer .mode-btn {
+    background-color: #7f8c8d;
+    padding: 8px 20px;
+    font-size: 0.95rem;
+    width: auto;
+}
+
+.debate-container[data-mode="timer"] ~ .debate-footer .mode-btn:hover {
+    background-color: #6c7a7d;
+}
+
 /* Header actions row */
 .header-actions {
     display: flex;
@@ -263,15 +275,26 @@ input[type="text"] {
     margin-top: 8px;
 }
 
+/* Footer with mode toggle button */
+.debate-footer {
+    padding: 10px 16px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+}
+
 .mode-btn {
-    padding: 8px 20px;
-    font-size: 1rem;
+    padding: 12px 32px;
+    font-size: 1.1rem;
     background-color: #27ae60;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s;
+    width: 100%;
+    max-width: 320px;
 }
 
 .mode-btn:hover {
