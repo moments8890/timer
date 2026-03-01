@@ -1,256 +1,370 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    overflow: hidden; /* Prevent scrolling for full screen feel */
 }
 
-.nav {
+/* Navigation Bar */
+.navbar {
     background-color: #2c3e50;
-    padding: 0;
-    display: flex;
-    gap: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 100;
 }
 
 .nav-btn {
-    flex: 1;
-    padding: 15px;
-    background-color: #34495e;
-    color: white;
+    background: none;
     border: none;
+    color: #bdc3c7;
+    font-size: 1.1em;
+    padding: 10px 20px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+    transition: color 0.3s, background-color 0.3s;
+    border-radius: 4px;
+    margin: 0 10px;
+    font-weight: 600;
 }
 
 .nav-btn:hover {
-    background-color: #2c3e50;
+    color: white;
+    background-color: rgba(255,255,255,0.1);
 }
 
 .nav-btn.active {
-    background-color: #3498db;
+    color: white;
+    background-color: #34495e;
+    border-bottom: 2px solid #3498db;
 }
 
-main {
+/* Main Content Area */
+.main-content {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow: hidden;
-}
-
-.section {
-    display: none;
+    position: relative;
     width: 100%;
     height: 100%;
-    align-items: center;
-    justify-content: center;
+}
+
+section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    transition: opacity 0.3s ease-in-out;
 }
 
-.section.active {
-    display: flex;
+.hidden-section {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* Standard Timer */
-.timer-display {
-    font-size: 25vw;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-    color: #2c3e50;
+.active-section {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* Standard Timer Styles */
+.timer-container {
     text-align: center;
-    line-height: 1;
+    width: 100%;
+    /* Removed max-width to allow huge font */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
+.timer-display {
+    font-size: 25vw; /* Calculated to fit "00:00" in 100vw width */
+    font-weight: bold;
+    font-family: monospace;
+    margin: 0;
+    line-height: 1;
+    color: #2c3e50;
+    white-space: nowrap;
 }
 
 .controls button {
-    padding: 10px 20px;
-    font-size: 1rem;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    margin: 0 10px;
+    cursor: pointer;
     background-color: #3498db;
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.controls button:active {
+    transform: scale(0.98);
 }
 
 .controls button:hover {
     background-color: #2980b9;
 }
 
-.duration-input {
-    margin-top: 20px;
+.controls button#reset-btn {
+    background-color: #e74c3c;
+}
+
+.controls button#reset-btn:hover {
+    background-color: #c0392b;
+}
+
+.settings {
+    margin-top: 30px;
+    font-size: 1.2em;
+}
+
+.label-settings {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.timer-settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+input[type="number"] {
+    padding: 8px;
+    width: 70px; /* Slightly larger input */
+    margin-left: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
     text-align: center;
 }
 
-.duration-input label {
-    margin-right: 10px;
-    font-size: 1rem;
+input[type="text"] {
+    padding: 8px 12px;
+    width: 120px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    text-align: center;
 }
 
-.duration-input input {
-    padding: 5px 10px;
-    font-size: 1rem;
-    border: 1px solid #bdc3c7;
-    border-radius: 3px;
-    width: 60px;
-}
-
-/* Free Debate Timer */
-.debate-container {
-    display: flex;
+/* Free Debate Timer Styles */
+.debate-wrapper {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.debate-side {
+.debate-header {
+    text-align: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
+
+.usage-guide {
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #e8f4f8;
+    border-radius: 5px;
+    border-left: 4px solid #3498db;
+}
+
+.usage-guide p {
+    margin: 0;
+    font-size: 0.95em;
+    color: #34495e;
+}
+
+.usage-guide kbd {
+    background-color: #fff;
+    border: 1px solid #bdc3c7;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: monospace;
+    font-size: 0.9em;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    font-weight: 600;
+}
+
+.debate-container {
+    display: flex;
+    flex: 1; /* Take remaining height */
+    width: 100%;
+    overflow: hidden;
+}
+
+.side {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
-    padding: 20px;
-    cursor: pointer;
-}
-
-.debate-side.left {
+    align-items: center;
+    padding: 10px;
     background-color: #ecf0f1;
+    transition: all 0.2s ease;
+    cursor: crosshair; 
+    border-right: 1px solid #ddd;
 }
 
-.debate-side.left.active {
-    background-color: #e74c3c;
-    color: white;
+.side:last-child {
+    border-right: none;
 }
 
-.debate-side.right {
-    background-color: #ecf0f1;
+.side h3 {
+    font-size: 3em;
+    margin: 0 0 10px 0;
+    color: #7f8c8d;
 }
 
-.debate-side.right.active {
-    background-color: #3498db;
-    color: white;
+.side .time-display {
+    font-size: 13vw; /* Calculated to fit "00:00" in 50vw width */
+    font-family: monospace;
+    font-weight: bold;
+    line-height: 1;
+    color: #7f8c8d;
+    white-space: nowrap;
 }
 
-/* Paused state (from local) */
-.debate-side.paused {
+.side.active {
+    background-color: #fff; /* Light background for active */
+    color: #2c3e50;
+}
+
+/* Side A Active Styles - RED */
+.side.left-side.active {
+    background-color: #fdedec; /* Light Red tint */
+}
+.side.left-side.active h3 {
+    color: #c0392b;
+}
+.side.left-side.active .time-display {
+    color: #c0392b;
+}
+.side.left-side.active .status {
+    color: #c0392b;
+}
+
+/* Side B Active Styles - BLUE */
+.side.right-side.active {
+    background-color: #ebf5fb; /* Light Blue tint */
+}
+.side.right-side.active h3 {
+    color: #2980b9;
+}
+.side.right-side.active .time-display {
+    color: #2980b9;
+}
+.side.right-side.active .status {
+    color: #2980b9;
+}
+
+.side.paused {
     opacity: 0.5;
-    background-color: #bdc3c7;
-}
-
-.side-label {
-    margin-bottom: 20px;
-}
-
-.label-input {
-    padding: 8px;
-    font-size: 1.2rem;
-    text-align: center;
-    border: 1px solid #bdc3c7;
-    border-radius: 3px;
-    width: 200px;
-}
-
-.debate-side.active .label-input {
-    border-color: white;
-    background-color: transparent;
-    color: white;
+    background-color: #bdc3c7; 
 }
 
 .status {
+    font-size: 1.5em;
+    color: #95a5a6;
     margin-top: 20px;
-    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.side.active .status {
     font-weight: bold;
 }
 
-.side-timer-input {
-    margin-top: 20px;
-    text-align: center;
+/* Blinking animations for running out time */
+@keyframes blink-slow {
+    0%, 100% { color: inherit; }
+    50% { color: #e67e22; } /* Orange */
 }
 
-.side-timer-input label {
-    margin-right: 10px;
-    font-size: 1rem;
+@keyframes blink-medium {
+    0%, 100% { color: inherit; }
+    50% { color: #e74c3c; } /* Red */
 }
 
-.side-timer-input input {
-    padding: 5px 10px;
-    font-size: 1rem;
-    border: 1px solid #bdc3c7;
-    border-radius: 3px;
-    width: 60px;
+@keyframes blink-fast {
+    0%, 100% { color: inherit; }
+    50% { color: #c0392b; } /* Dark Red */
 }
 
-.keyboard-guide {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    display: none;
+.blink-30 {
+    animation: blink-slow 1.5s infinite;
 }
 
-#free-debate.active .keyboard-guide {
-    display: block;
+.blink-15 {
+    animation: blink-medium 1s infinite;
 }
 
-/* Blink animations */
-@keyframes blink-10 {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
+.blink-10 {
+    animation: blink-fast 0.7s infinite;
 }
 
-@keyframes blink-30 {
-    0%, 66% { opacity: 1; }
-    67%, 100% { opacity: 0.3; }
-}
-
-@keyframes blink-60 {
-    0%, 80% { opacity: 1; }
-    81%, 100% { opacity: 0.7; }
-}
-
-/* Mobile responsive (from local) */
+/* Mobile responsive */
 @media (max-width: 768px) {
+    .navbar {
+        padding: 10px 5px;
+    }
+
     .nav-btn {
-        font-size: 0.9rem;
-        padding: 12px 10px;
+        font-size: 1em;
+        padding: 10px 16px;
+        margin: 0 4px;
     }
 
     .controls {
+        display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        gap: 8px;
     }
 
     .controls button {
-        padding: 8px 16px;
-        font-size: 0.9rem;
+        padding: 14px 22px;
+        font-size: 1.3em;
         margin: 0;
     }
 
-    .duration-input {
-        font-size: 0.9rem;
+    .debate-header {
+        padding: 10px 8px;
     }
 
-    .side-timer-input {
-        font-size: 0.85rem;
+    .debate-header h2 {
+        font-size: 1.2em;
+        margin: 2px 0 6px;
+    }
+
+    .side h3 {
+        font-size: 2em;
+    }
+
+    .status {
+        font-size: 1.1em;
+        margin-top: 10px;
     }
 }
 
@@ -259,32 +373,35 @@ main {
         flex-direction: column;
     }
 
-    .debate-side .timer-display {
+    .side {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .side:last-child {
+        border-bottom: none;
+    }
+
+    .side .time-display {
         font-size: 28vw;
     }
+
+    .side h3 {
+        font-size: 2.2em;
+    }
 }
 
-/* Landscape: hide header elements so the timer display has room */
+/* Landscape: hide header so timer display has room */
 @media (max-height: 450px) and (orientation: landscape) {
-    .side-label,
-    .side-timer-input,
-    .keyboard-guide {
+    .debate-header {
         display: none;
     }
-
-    .debate-side {
-        padding: 8px;
-    }
-
-    .status {
-        margin-top: 6px;
-        font-size: 0.9rem;
-    }
 }
 
-/* Touch tap affordance (from local) */
+/* Touch tap affordance */
 @media (hover: none) and (pointer: coarse) {
-    .debate-side {
+    .side {
+        cursor: pointer;
         -webkit-tap-highlight-color: transparent;
         user-select: none;
     }

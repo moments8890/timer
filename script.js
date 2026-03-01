@@ -1,15 +1,4 @@
-// Navigation
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.section).classList.add('active');
-    });
-});
-
-// Audio (from local)
+// --- Audio ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function beep(duration = 200, frequency = 880, volume = 0.2) {
     try {
@@ -27,247 +16,308 @@ function beep(duration = 200, frequency = 880, volume = 0.2) {
     }
 }
 
-// Standard Timer
-const STANDARD_WARNING_THRESHOLD = 10;
-let standardTime = 5 * 60;
-let standardRunning = false;
-let standardInterval;
-let standardWarningTriggered = false;
+// --- Navigation Logic ---
+const navButtons = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('section');
 
-const standardDisplay = document.getElementById('standardDisplay');
-const startBtn = document.getElementById('startBtn');
-const pauseBtn = document.getElementById('pauseBtn');
-const resetBtn = document.getElementById('resetBtn');
-const durationInput = document.getElementById('durationInput');
+navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        navButtons.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+
+        // Hide all sections
+        sections.forEach(section => {
+            section.classList.remove('active-section');
+            section.classList.add('hidden-section');
+        });
+
+        // Show target section
+        const targetId = btn.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        targetSection.classList.remove('hidden-section');
+        targetSection.classList.add('active-section');
+    });
+});
+
+
+// --- Standard Timer Logic ---
+let mainTimerInterval;
+let mainTimeLeft = 5 * 60; // seconds
+let mainIsRunning = false;
+let mainWarningTriggered = false;
+const MAIN_WARNING_THRESHOLD = 10;
+
+const mainTimerDisplay = document.getElementById('main-timer-display');
+const startBtn = document.getElementById('start-btn');
+const pauseBtn = document.getElementById('pause-btn');
+const resetBtn = document.getElementById('reset-btn');
+const durationInput = document.getElementById('duration-input');
 
 function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-function blink(element, speed) {
-    element.style.animation = `blink-${speed} 0.3s infinite`;
-}
+function updateMainTimerDisplay() {
+    mainTimerDisplay.textContent = formatTime(mainTimeLeft);
 
-function stopBlink(element) {
-    element.style.animation = 'none';
-}
-
-function updateStandardDisplay() {
-    standardDisplay.textContent = formatTime(standardTime);
-
-    if (standardTime <= 10 && standardTime > 0) {
-        blink(standardDisplay, 10);
-    } else if (standardTime <= 30 && standardTime > 10) {
-        blink(standardDisplay, 30);
-    } else if (standardTime <= 60 && standardTime > 30) {
-        blink(standardDisplay, 60);
-    } else if (standardTime === 0) {
-        blink(standardDisplay, 10);
-    } else {
-        stopBlink(standardDisplay);
+    // Apply blinking effect based on time remaining
+    mainTimerDisplay.classList.remove('blink-30', 'blink-15', 'blink-10');
+    if (mainTimeLeft <= 10 && mainTimeLeft > 0) {
+        mainTimerDisplay.classList.add('blink-10');
+    } else if (mainTimeLeft <= 15 && mainTimeLeft > 0) {
+        mainTimerDisplay.classList.add('blink-15');
+    } else if (mainTimeLeft <= 30 && mainTimeLeft > 0) {
+        mainTimerDisplay.classList.add('blink-30');
     }
 }
 
-function startStandardTimer() {
-    if (!standardRunning) {
-        standardRunning = true;
-        standardInterval = setInterval(() => {
-            if (standardTime > 0) {
-                standardTime--;
-                updateStandardDisplay();
-                if (!standardWarningTriggered && standardTime <= STANDARD_WARNING_THRESHOLD) {
-                    standardWarningTriggered = true;
-                    beep(200, 880, 0.25);
-                    setTimeout(() => beep(150, 880, 0.2), 350);
-                }
-            } else {
-                clearInterval(standardInterval);
-                standardRunning = false;
+function startMainTimer() {
+    if (mainIsRunning) return;
+    
+    if (mainTimeLeft <= 0) {
+        resetMainTimer();
+        return; 
+    }
+
+    mainIsRunning = true;
+    mainTimerInterval = setInterval(() => {
+        if (mainTimeLeft > 0) {
+            mainTimeLeft--;
+            updateMainTimerDisplay();
+            if (!mainWarningTriggered && mainTimeLeft <= MAIN_WARNING_THRESHOLD) {
+                mainWarningTriggered = true;
+                beep(200, 880, 0.25);
+                setTimeout(() => beep(150, 880, 0.2), 350);
             }
-        }, 1000);
-    }
+        } else {
+            clearInterval(mainTimerInterval);
+            mainIsRunning = false;
+            mainTimerDisplay.classList.remove('blink-30', 'blink-15', 'blink-10');
+        }
+    }, 1000);
 }
 
-function pauseStandardTimer() {
-    standardRunning = false;
-    clearInterval(standardInterval);
+function pauseMainTimer() {
+    clearInterval(mainTimerInterval);
+    mainIsRunning = false;
+    mainTimerDisplay.classList.remove('blink-30', 'blink-15', 'blink-10');
 }
 
-function resetStandardTimer() {
-    pauseStandardTimer();
-    standardTime = durationInput.value * 60;
-    standardWarningTriggered = false;
-    stopBlink(standardDisplay);
-    updateStandardDisplay();
+function resetMainTimer() {
+    pauseMainTimer();
+    const durationMins = parseInt(durationInput.value) || 5;
+    mainTimeLeft = durationMins * 60;
+    mainWarningTriggered = false;
+    mainTimerDisplay.classList.remove('blink-30', 'blink-15', 'blink-10');
+    updateMainTimerDisplay();
 }
 
-startBtn.addEventListener('click', startStandardTimer);
-pauseBtn.addEventListener('click', pauseStandardTimer);
-resetBtn.addEventListener('click', resetStandardTimer);
-durationInput.addEventListener('change', resetStandardTimer);
+startBtn.addEventListener('click', startMainTimer);
+pauseBtn.addEventListener('click', pauseMainTimer);
+resetBtn.addEventListener('click', resetMainTimer);
+durationInput.addEventListener('change', resetMainTimer);
 
-// Free Debate Timer
+// Initialize
+resetMainTimer();
+
+
+// --- Free Debate Timer Logic ---
+let debateIntervalA;
+let debateIntervalB;
+let timeLeftA = 4 * 60;
+let timeLeftB = 4 * 60;
+let activeSide = null; // 'A', 'B', or null
 const DEBATE_WARNING_THRESHOLD = 10;
-let leftTime = 4 * 60;
-let rightTime = 4 * 60;
-let activeLeftSide = true;
-let debateRunning = false;
-let debateInterval;
-let leftWarningTriggered = false;
-let rightWarningTriggered = false;
+let warningTriggeredA = false;
+let warningTriggeredB = false;
 
-const leftSide = document.getElementById('leftSide');
-const rightSide = document.getElementById('rightSide');
-const leftDisplay = document.getElementById('leftDisplay');
-const rightDisplay = document.getElementById('rightDisplay');
-const leftStatus = document.getElementById('leftStatus');
-const rightStatus = document.getElementById('rightStatus');
-const leftDuration = document.getElementById('leftDuration');
-const rightDuration = document.getElementById('rightDuration');
+const sideA = document.getElementById('side-a');
+const sideB = document.getElementById('side-b');
+const timerDisplayA = document.getElementById('timer-a');
+const timerDisplayB = document.getElementById('timer-b');
+const debateDurationInput = document.getElementById('debate-duration-input');
+const resetDebateBtn = document.getElementById('reset-debate-btn');
+const leftLabelInput = document.getElementById('left-label-input');
+const rightLabelInput = document.getElementById('right-label-input');
 
 function updateDebateDisplay() {
-    leftDisplay.textContent = formatTime(leftTime);
-    rightDisplay.textContent = formatTime(rightTime);
+    timerDisplayA.textContent = formatTime(timeLeftA);
+    timerDisplayB.textContent = formatTime(timeLeftB);
 
-    if (activeLeftSide) {
-        leftStatus.textContent = leftTime > 0 ? 'Speaking' : "Time's up!";
-        rightStatus.textContent = 'Waiting';
-    } else {
-        leftStatus.textContent = 'Waiting';
-        rightStatus.textContent = rightTime > 0 ? 'Speaking' : "Time's up!";
+    // Apply blinking effect for side A
+    timerDisplayA.classList.remove('blink-30', 'blink-15', 'blink-10');
+    if (timeLeftA <= 10 && timeLeftA > 0) {
+        timerDisplayA.classList.add('blink-10');
+    } else if (timeLeftA <= 15 && timeLeftA > 0) {
+        timerDisplayA.classList.add('blink-15');
+    } else if (timeLeftA <= 30 && timeLeftA > 0) {
+        timerDisplayA.classList.add('blink-30');
     }
 
-    const activeDisplay = activeLeftSide ? leftDisplay : rightDisplay;
-    const activeTime = activeLeftSide ? leftTime : rightTime;
-
-    if (activeTime <= 10 && activeTime > 0) {
-        blink(activeDisplay, 10);
-    } else if (activeTime <= 30 && activeTime > 10) {
-        blink(activeDisplay, 30);
-    } else if (activeTime <= 60 && activeTime > 30) {
-        blink(activeDisplay, 60);
-    } else {
-        stopBlink(activeDisplay);
+    // Apply blinking effect for side B
+    timerDisplayB.classList.remove('blink-30', 'blink-15', 'blink-10');
+    if (timeLeftB <= 10 && timeLeftB > 0) {
+        timerDisplayB.classList.add('blink-10');
+    } else if (timeLeftB <= 15 && timeLeftB > 0) {
+        timerDisplayB.classList.add('blink-15');
+    } else if (timeLeftB <= 30 && timeLeftB > 0) {
+        timerDisplayB.classList.add('blink-30');
     }
-
-    stopBlink(activeLeftSide ? rightDisplay : leftDisplay);
 }
 
-function startDebateTimer() {
-    if (!debateRunning) {
-        debateRunning = true;
-        leftSide.classList.toggle('active', activeLeftSide);
-        rightSide.classList.toggle('active', !activeLeftSide);
-        leftSide.classList.toggle('paused', !activeLeftSide);
-        rightSide.classList.toggle('paused', activeLeftSide);
-        debateInterval = setInterval(() => {
-            if (activeLeftSide && leftTime > 0) {
-                leftTime--;
-                updateDebateDisplay();
-                if (!leftWarningTriggered && leftTime <= DEBATE_WARNING_THRESHOLD) {
-                    leftWarningTriggered = true;
-                    beep(180, 600, 0.22);
-                    setTimeout(() => beep(130, 600, 0.18), 300);
-                }
-            } else if (!activeLeftSide && rightTime > 0) {
-                rightTime--;
-                updateDebateDisplay();
-                if (!rightWarningTriggered && rightTime <= DEBATE_WARNING_THRESHOLD) {
-                    rightWarningTriggered = true;
-                    beep(180, 1000, 0.22);
-                    setTimeout(() => beep(130, 1000, 0.18), 300);
-                }
-            } else {
-                if ((activeLeftSide && leftTime === 0) || (!activeLeftSide && rightTime === 0)) {
-                    clearInterval(debateInterval);
-                    debateRunning = false;
-                }
+function startSideA() {
+    if (activeSide === 'A' || timeLeftA <= 0) return;
+    
+    // Stop B
+    clearInterval(debateIntervalB);
+    sideB.classList.remove('active');
+    sideB.classList.add('paused');
+    
+    // Start A
+    activeSide = 'A';
+    sideA.classList.add('active');
+    sideA.classList.remove('paused');
+    sideA.querySelector('.status').textContent = "Speaking...";
+    sideB.querySelector('.status').textContent = "Waiting...";
+
+    debateIntervalA = setInterval(() => {
+        if (timeLeftA > 0) {
+            timeLeftA--;
+            updateDebateDisplay();
+            if (!warningTriggeredA && timeLeftA <= DEBATE_WARNING_THRESHOLD) {
+                warningTriggeredA = true;
+                beep(180, 600, 0.22);
+                setTimeout(() => beep(130, 600, 0.18), 300);
             }
-        }, 1000);
-    }
+        } else {
+            clearInterval(debateIntervalA);
+            sideA.classList.remove('active');
+            timerDisplayA.classList.remove('blink-30', 'blink-15', 'blink-10');
+            sideA.querySelector('.status').textContent = "Time's up!";
+        }
+    }, 1000);
 }
 
-function pauseDebateTimer() {
-    debateRunning = false;
-    clearInterval(debateInterval);
-    leftSide.classList.remove('active', 'paused');
-    rightSide.classList.remove('active', 'paused');
+function startSideB() {
+    if (activeSide === 'B' || timeLeftB <= 0) return;
+
+    // Stop A
+    clearInterval(debateIntervalA);
+    sideA.classList.remove('active');
+    sideA.classList.add('paused');
+
+    // Start B
+    activeSide = 'B';
+    sideB.classList.add('active');
+    sideB.classList.remove('paused');
+    sideB.querySelector('.status').textContent = "Speaking...";
+    sideA.querySelector('.status').textContent = "Waiting...";
+
+    debateIntervalB = setInterval(() => {
+        if (timeLeftB > 0) {
+            timeLeftB--;
+            updateDebateDisplay();
+            if (!warningTriggeredB && timeLeftB <= DEBATE_WARNING_THRESHOLD) {
+                warningTriggeredB = true;
+                beep(180, 1000, 0.22);
+                setTimeout(() => beep(130, 1000, 0.18), 300);
+            }
+        } else {
+            clearInterval(debateIntervalB);
+            sideB.classList.remove('active');
+            timerDisplayB.classList.remove('blink-30', 'blink-15', 'blink-10');
+            sideB.querySelector('.status').textContent = "Time's up!";
+        }
+    }, 1000);
 }
 
-function resetDebateTimer() {
-    pauseDebateTimer();
-    leftTime = leftDuration.value * 60;
-    rightTime = rightDuration.value * 60;
-    leftWarningTriggered = false;
-    rightWarningTriggered = false;
-    stopBlink(leftDisplay);
-    stopBlink(rightDisplay);
+function pauseDebate() {
+    clearInterval(debateIntervalA);
+    clearInterval(debateIntervalB);
+    activeSide = null;
+    sideA.classList.remove('active', 'paused');
+    sideB.classList.remove('active', 'paused');
+    timerDisplayA.classList.remove('blink-30', 'blink-15', 'blink-10');
+    timerDisplayB.classList.remove('blink-30', 'blink-15', 'blink-10');
+}
+
+function resetDebate() {
+    pauseDebate();
+    const durationMins = parseInt(debateDurationInput.value) || 4;
+    timeLeftA = durationMins * 60;
+    timeLeftB = durationMins * 60;
+    warningTriggeredA = false;
+    warningTriggeredB = false;
+    timerDisplayA.classList.remove('blink-30', 'blink-15', 'blink-10');
+    timerDisplayB.classList.remove('blink-30', 'blink-15', 'blink-10');
     updateDebateDisplay();
 }
 
-// Touch detection (from local)
+// Touch vs desktop interaction
 const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+const idleStatus = isTouchDevice ? "Tap to start" : "Hover to start";
+sideA.querySelector('.status').textContent = idleStatus;
+sideB.querySelector('.status').textContent = idleStatus;
 
-if (!isTouchDevice) {
-    leftSide.addEventListener('mouseenter', () => {
-        activeLeftSide = true;
-        updateDebateDisplay();
-        startDebateTimer();
-    });
-    rightSide.addEventListener('mouseenter', () => {
-        activeLeftSide = false;
-        updateDebateDisplay();
-        startDebateTimer();
-    });
-    document.getElementById('free-debate').addEventListener('mouseleave', pauseDebateTimer);
+function pauseDebateAndReset() {
+    pauseDebate();
+    sideA.querySelector('.status').textContent = idleStatus;
+    sideB.querySelector('.status').textContent = idleStatus;
 }
 
-// Click handlers — click active running side to stop; click inactive/stopped side to start
-leftSide.addEventListener('click', () => {
-    if (debateRunning && activeLeftSide) {
-        pauseDebateTimer();
-    } else {
-        pauseDebateTimer(); // stop any running timer before switching/starting
-        activeLeftSide = true;
-        updateDebateDisplay();
-        startDebateTimer();
-    }
+const debateContainer = document.querySelector('.debate-container');
+
+if (!isTouchDevice) {
+    sideA.addEventListener('mouseenter', startSideA);
+    sideB.addEventListener('mouseenter', startSideB);
+    debateContainer.addEventListener('mouseleave', pauseDebateAndReset);
+}
+
+// Click: active side → stop; inactive side → start
+sideA.addEventListener('click', () => {
+    if (activeSide === 'A') pauseDebateAndReset();
+    else startSideA();
+});
+sideB.addEventListener('click', () => {
+    if (activeSide === 'B') pauseDebateAndReset();
+    else startSideB();
 });
 
-rightSide.addEventListener('click', () => {
-    if (debateRunning && !activeLeftSide) {
-        pauseDebateTimer();
-    } else {
-        pauseDebateTimer(); // stop any running timer before switching/starting
-        activeLeftSide = false;
-        updateDebateDisplay();
-        startDebateTimer();
-    }
+resetDebateBtn.addEventListener('click', resetDebate);
+debateDurationInput.addEventListener('change', resetDebate);
+
+// Label customization
+leftLabelInput.addEventListener('input', () => {
+    const leftLabel = sideA.querySelector('h3');
+    leftLabel.textContent = leftLabelInput.value || '不应该';
 });
 
-// Keyboard controls
+rightLabelInput.addEventListener('input', () => {
+    const rightLabel = sideB.querySelector('h3');
+    rightLabel.textContent = rightLabelInput.value || '应该';
+});
+
+// Arrow Key Controls for Free Debate
 document.addEventListener('keydown', (e) => {
-    if (document.getElementById('free-debate').classList.contains('active')) {
-        if (e.key === 'ArrowLeft') {
-            activeLeftSide = true;
-            updateDebateDisplay();
-            startDebateTimer();
-        } else if (e.key === 'ArrowRight') {
-            activeLeftSide = false;
-            updateDebateDisplay();
-            startDebateTimer();
-        } else if (e.key === ' ' || e.key === 'Escape') {
-            e.preventDefault();
-            pauseDebateTimer();
-        }
+    // Only respond to keys when free-debate-section is active
+    const freeDebateSection = document.getElementById('free-debate-section');
+    if (!freeDebateSection.classList.contains('active-section')) return;
+
+    if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        startSideA();
+    } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        startSideB();
+    } else if (e.key === ' ' || e.key === 'Escape') {
+        e.preventDefault();
+        pauseDebateAndReset();
     }
 });
-
-leftDuration.addEventListener('change', resetDebateTimer);
-rightDuration.addEventListener('change', resetDebateTimer);
 
 // Initialize
-updateStandardDisplay();
-updateDebateDisplay();
+resetDebate();

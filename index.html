@@ -3,62 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer</title>
+    <title>Debate Timer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="nav">
-        <button class="nav-btn active" data-section="standard">Standard Timer</button>
-        <button class="nav-btn" data-section="free-debate">Free Debate</button>
+    <nav class="navbar">
+        <button class="nav-btn active" data-target="standard-timer-section">Standard Timer</button>
+        <button class="nav-btn" data-target="free-debate-section">Free Debate</button>
     </nav>
 
-    <main>
-        <section id="standard" class="section active">
-            <div class="timer-display" id="standardDisplay">05:00</div>
-            <div class="controls">
-                <button id="startBtn">Start</button>
-                <button id="pauseBtn">Pause</button>
-                <button id="resetBtn">Reset</button>
-            </div>
-            <div class="duration-input">
-                <label for="durationInput">Duration (minutes):</label>
-                <input type="number" id="durationInput" min="1" max="60" value="5">
+    <div class="main-content">
+        <!-- Feature 1: Standard Countdown Timer -->
+        <section id="standard-timer-section" class="active-section">
+            <div class="timer-container">
+                <h2>Standard Timer</h2>
+                <div class="timer-display" id="main-timer-display">05:00</div>
+                <div class="controls">
+                    <button id="start-btn">Start</button>
+                    <button id="pause-btn">Pause</button>
+                    <button id="reset-btn">Reset</button>
+                </div>
+                <div class="settings">
+                    <label for="duration-input">Duration (mins):</label>
+                    <input type="number" id="duration-input" value="5" min="1" max="60">
+                </div>
             </div>
         </section>
 
-        <section id="free-debate" class="section">
-            <div class="debate-container">
-                <div class="debate-side left" id="leftSide">
-                    <div class="side-label">
-                        <input type="text" class="label-input" id="leftLabel" value="不应该" maxlength="20">
+        <!-- Feature 2: Side-by-Side Free Debate Timer -->
+        <section id="free-debate-section" class="hidden-section">
+            <div class="debate-wrapper">
+                <div class="debate-header">
+                    <h2>Free Debate Timer</h2>
+                    <div class="usage-guide">
+                        <p><strong>Controls:</strong> Hover over a side to start its timer | <kbd>←</kbd> Left side | <kbd>→</kbd> Right side | <kbd>Space</kbd> or <kbd>Esc</kbd> Pause</p>
                     </div>
-                    <div class="timer-display" id="leftDisplay">04:00</div>
-                    <div class="status" id="leftStatus">Waiting</div>
-                    <div class="side-timer-input">
-                        <label for="leftDuration">Duration (minutes):</label>
-                        <input type="number" id="leftDuration" min="1" max="60" value="4">
-                    </div>
-                </div>
-
-                <div class="debate-side right" id="rightSide">
-                    <div class="side-label">
-                        <input type="text" class="label-input" id="rightLabel" value="应该" maxlength="20">
-                    </div>
-                    <div class="timer-display" id="rightDisplay">04:00</div>
-                    <div class="status" id="rightStatus">Waiting</div>
-                    <div class="side-timer-input">
-                        <label for="rightDuration">Duration (minutes):</label>
-                        <input type="number" id="rightDuration" min="1" max="60" value="4">
+                    <div class="settings">
+                        <div class="label-settings">
+                            <label for="left-label-input">Left Side Label:</label>
+                            <input type="text" id="left-label-input" value="不应该" maxlength="20">
+                            <label for="right-label-input">Right Side Label:</label>
+                            <input type="text" id="right-label-input" value="应该" maxlength="20">
+                        </div>
+                        <div class="timer-settings">
+                            <label for="debate-duration-input">Total Time per Side (mins):</label>
+                            <input type="number" id="debate-duration-input" value="4" min="1" max="60">
+                            <button id="reset-debate-btn">Reset Debate</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="keyboard-guide">
-                <p><strong>Keyboard Controls:</strong></p>
-                <p>← / → : Select side | Space/Esc : Pause</p>
+                <div class="debate-container">
+                    <div class="side left-side" id="side-a">
+                        <h3>不应该</h3>
+                        <div class="time-display" id="timer-a">04:00</div>
+                        <p class="status">Hover to start</p>
+                    </div>
+                    <div class="side right-side" id="side-b">
+                        <h3>应该</h3>
+                        <div class="time-display" id="timer-b">04:00</div>
+                        <p class="status">Hover to start</p>
+                    </div>
+                </div>
             </div>
         </section>
-    </main>
+    </div>
 
     <script src="script.js"></script>
 </body>
