@@ -238,6 +238,37 @@ input[type="text"] {
     color: #7f8c8d;
 }
 
+.side h3[contenteditable] {
+    cursor: text;
+    outline: none;
+    border-bottom: 1px dashed currentColor;
+    padding-bottom: 2px;
+    min-width: 1em;
+}
+
+.side h3[contenteditable]:focus {
+    border-bottom-style: solid;
+}
+
+.side-duration {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9em;
+    color: #95a5a6;
+}
+
+.side-duration input {
+    width: 52px;
+    padding: 4px 6px;
+    border: 1px solid #bdc3c7;
+    border-radius: 3px;
+    font-size: 1em;
+    text-align: center;
+    background: transparent;
+}
+
 .side .time-display {
     font-size: 13vw; /* Calculated to fit "00:00" in 50vw width */
     font-family: monospace;
@@ -366,11 +397,6 @@ input[type="text"] {
     .settings {
         margin-top: 4px;
         font-size: 0.85em;
-    }
-
-    .label-settings,
-    .timer-settings {
-        gap: 6px;
     }
 
     .side h3 {

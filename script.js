@@ -139,10 +139,9 @@ const sideA = document.getElementById('side-a');
 const sideB = document.getElementById('side-b');
 const timerDisplayA = document.getElementById('timer-a');
 const timerDisplayB = document.getElementById('timer-b');
-const debateDurationInput = document.getElementById('debate-duration-input');
+const durationA = document.getElementById('duration-a');
+const durationB = document.getElementById('duration-b');
 const resetDebateBtn = document.getElementById('reset-debate-btn');
-const leftLabelInput = document.getElementById('left-label-input');
-const rightLabelInput = document.getElementById('right-label-input');
 
 function updateDebateDisplay() {
     timerDisplayA.textContent = formatTime(timeLeftA);
@@ -247,9 +246,8 @@ function pauseDebate() {
 
 function resetDebate() {
     pauseDebate();
-    const durationMins = parseInt(debateDurationInput.value) || 4;
-    timeLeftA = durationMins * 60;
-    timeLeftB = durationMins * 60;
+    timeLeftA = (parseInt(durationA.value) || 4) * 60;
+    timeLeftB = (parseInt(durationB.value) || 4) * 60;
     warningTriggeredA = false;
     warningTriggeredB = false;
     timerDisplayA.classList.remove('blink-30', 'blink-15', 'blink-10');
@@ -288,18 +286,16 @@ sideB.addEventListener('click', () => {
 });
 
 resetDebateBtn.addEventListener('click', resetDebate);
-debateDurationInput.addEventListener('change', resetDebate);
+durationA.addEventListener('change', () => { timeLeftA = (parseInt(durationA.value) || 4) * 60; updateDebateDisplay(); });
+durationB.addEventListener('change', () => { timeLeftB = (parseInt(durationB.value) || 4) * 60; updateDebateDisplay(); });
 
-// Label customization
-leftLabelInput.addEventListener('input', () => {
-    const leftLabel = sideA.querySelector('h3');
-    leftLabel.textContent = leftLabelInput.value || '不应该';
-});
+// Prevent tapping the editable label from starting/stopping the timer
+document.getElementById('left-label').addEventListener('click', (e) => e.stopPropagation());
+document.getElementById('right-label').addEventListener('click', (e) => e.stopPropagation());
 
-rightLabelInput.addEventListener('input', () => {
-    const rightLabel = sideB.querySelector('h3');
-    rightLabel.textContent = rightLabelInput.value || '应该';
-});
+// Prevent duration inputs from starting/stopping the timer
+durationA.addEventListener('click', (e) => e.stopPropagation());
+durationB.addEventListener('click', (e) => e.stopPropagation());
 
 // Arrow Key Controls for Free Debate
 document.addEventListener('keydown', (e) => {

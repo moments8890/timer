@@ -39,29 +39,29 @@
                         <p><strong>Controls:</strong> Hover over a side to start its timer | <kbd>←</kbd> Left side | <kbd>→</kbd> Right side | <kbd>Space</kbd> or <kbd>Esc</kbd> Pause</p>
                     </div>
                     <div class="settings">
-                        <div class="label-settings">
-                            <label for="left-label-input">Left Side Label:</label>
-                            <input type="text" id="left-label-input" value="不应该" maxlength="20">
-                            <label for="right-label-input">Right Side Label:</label>
-                            <input type="text" id="right-label-input" value="应该" maxlength="20">
-                        </div>
                         <div class="timer-settings">
-                            <label for="debate-duration-input">Total Time per Side (mins):</label>
-                            <input type="number" id="debate-duration-input" value="4" min="1" max="60">
                             <button id="reset-debate-btn">Reset Debate</button>
                         </div>
                     </div>
                 </div>
                 <div class="debate-container">
                     <div class="side left-side" id="side-a">
-                        <h3>不应该</h3>
+                        <h3 contenteditable="true" id="left-label">不应该</h3>
                         <div class="time-display" id="timer-a">04:00</div>
                         <p class="status">Hover to start</p>
+                        <div class="side-duration">
+                            <input type="number" id="duration-a" value="4" min="1" max="60">
+                            <span>min</span>
+                        </div>
                     </div>
                     <div class="side right-side" id="side-b">
-                        <h3>应该</h3>
+                        <h3 contenteditable="true" id="right-label">应该</h3>
                         <div class="time-display" id="timer-b">04:00</div>
                         <p class="status">Hover to start</p>
+                        <div class="side-duration">
+                            <input type="number" id="duration-b" value="4" min="1" max="60">
+                            <span>min</span>
+                        </div>
                     </div>
                 </div>
             </div>
