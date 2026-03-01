@@ -350,12 +350,27 @@ input[type="text"] {
     }
 
     .debate-header {
-        padding: 10px 8px;
+        padding: 6px 8px;
     }
 
     .debate-header h2 {
-        font-size: 1.2em;
-        margin: 2px 0 6px;
+        font-size: 1em;
+        margin: 0 0 4px;
+    }
+
+    /* Hide keyboard guide on touch devices */
+    .usage-guide {
+        display: none;
+    }
+
+    .settings {
+        margin-top: 4px;
+        font-size: 0.85em;
+    }
+
+    .label-settings,
+    .timer-settings {
+        gap: 6px;
     }
 
     .side h3 {
