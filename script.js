@@ -139,8 +139,9 @@ const sideA = document.getElementById('side-a');
 const sideB = document.getElementById('side-b');
 const timerDisplayA = document.getElementById('timer-a');
 const timerDisplayB = document.getElementById('timer-b');
-const durationA = document.getElementById('duration-a');
-const durationB = document.getElementById('duration-b');
+const configPro = document.getElementById('config-pro');
+const configCon = document.getElementById('config-con');
+const configTime = document.getElementById('config-time');
 const resetDebateBtn = document.getElementById('reset-debate-btn');
 const debateModeBtn = document.getElementById('debate-mode-btn');
 const debateContainer = document.querySelector('.debate-container');
@@ -248,8 +249,9 @@ function pauseDebate() {
 
 function resetDebate() {
     pauseDebate();
-    timeLeftA = (parseInt(durationA.value) || 4) * 60;
-    timeLeftB = (parseInt(durationB.value) || 4) * 60;
+    const mins = (parseInt(configTime.value) || 4) * 60;
+    timeLeftA = mins;
+    timeLeftB = mins;
     warningTriggeredA = false;
     warningTriggeredB = false;
     timerDisplayA.classList.remove('blink-30', 'blink-15', 'blink-10');
@@ -261,14 +263,12 @@ function resetDebate() {
 function setDebateMode(mode) {
     debateContainer.dataset.mode = mode;
     if (mode === 'timer') {
-        debateModeBtn.textContent = '◀ Setup';
-        document.getElementById('left-label').contentEditable = 'false';
-        document.getElementById('right-label').contentEditable = 'false';
+        debateModeBtn.textContent = '◀ 设置';
+        sideA.querySelector('h3').textContent = configPro.value || '正方';
+        sideB.querySelector('h3').textContent = configCon.value || '反方';
         resetDebate();
     } else {
-        debateModeBtn.textContent = '▶ Start Timer';
-        document.getElementById('left-label').contentEditable = 'true';
-        document.getElementById('right-label').contentEditable = 'true';
+        debateModeBtn.textContent = '▶ 开始';
         pauseDebate();
     }
 }
@@ -306,16 +306,6 @@ sideB.addEventListener('click', () => {
 });
 
 resetDebateBtn.addEventListener('click', resetDebate);
-durationA.addEventListener('change', () => { timeLeftA = (parseInt(durationA.value) || 4) * 60; updateDebateDisplay(); });
-durationB.addEventListener('change', () => { timeLeftB = (parseInt(durationB.value) || 4) * 60; updateDebateDisplay(); });
-
-// Prevent tapping the editable label from starting/stopping the timer
-document.getElementById('left-label').addEventListener('click', (e) => e.stopPropagation());
-document.getElementById('right-label').addEventListener('click', (e) => e.stopPropagation());
-
-// Prevent duration inputs from starting/stopping the timer
-durationA.addEventListener('click', (e) => e.stopPropagation());
-durationB.addEventListener('click', (e) => e.stopPropagation());
 
 // Arrow Key Controls for Free Debate
 document.addEventListener('keydown', (e) => {

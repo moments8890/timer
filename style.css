@@ -238,20 +238,18 @@ input[type="text"] {
     color: #7f8c8d;
 }
 
-/* Config mode: show labels + duration, hide timer */
-.debate-container[data-mode="config"] .time-display,
-.debate-container[data-mode="config"] .status {
+/* Config mode: show form, hide timer panels */
+.debate-container[data-mode="config"] .side {
     display: none;
 }
 
-/* Timer mode: hide duration inputs; label becomes non-editable */
-.debate-container[data-mode="timer"] .side-duration {
-    display: none;
+.debate-container[data-mode="config"] .config-form {
+    display: flex;
 }
 
-.debate-container[data-mode="timer"] h3 {
-    cursor: default;
-    border-bottom: none;
+/* Timer mode: hide form, show panels */
+.debate-container[data-mode="timer"] .config-form {
+    display: none;
 }
 
 /* In timer mode, shrink the footer button */
@@ -264,6 +262,53 @@ input[type="text"] {
 
 .debate-container[data-mode="timer"] ~ .debate-footer .mode-btn:hover {
     background-color: #6c7a7d;
+}
+
+/* Config form */
+.config-form {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    padding: 40px 20px;
+}
+
+.config-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.3em;
+}
+
+.config-field label {
+    min-width: 2.8em;
+    text-align: right;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.config-field input[type="text"] {
+    font-size: 1em;
+    padding: 10px 14px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    width: 160px;
+}
+
+.config-field input[type="number"] {
+    font-size: 1em;
+    padding: 10px 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    width: 64px;
+    text-align: center;
+}
+
+.config-field .unit {
+    color: #7f8c8d;
+    font-size: 0.9em;
 }
 
 /* Header actions row */
@@ -301,36 +346,6 @@ input[type="text"] {
     background-color: #219a52;
 }
 
-.side h3[contenteditable] {
-    cursor: text;
-    outline: none;
-    border-bottom: 1px dashed currentColor;
-    padding-bottom: 2px;
-    min-width: 1em;
-}
-
-.side h3[contenteditable]:focus {
-    border-bottom-style: solid;
-}
-
-.side-duration {
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.9em;
-    color: #95a5a6;
-}
-
-.side-duration input {
-    width: 52px;
-    padding: 4px 6px;
-    border: 1px solid #bdc3c7;
-    border-radius: 3px;
-    font-size: 1em;
-    text-align: center;
-    background: transparent;
-}
 
 .side .time-display {
     font-size: 13vw; /* Calculated to fit "00:00" in 50vw width */

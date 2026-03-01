@@ -43,23 +43,30 @@
                     </div>
                 </div>
                 <div class="debate-container" data-mode="config">
-                    <div class="side left-side" id="side-a">
-                        <h3 contenteditable="true" id="left-label">不应该</h3>
-                        <div class="time-display" id="timer-a">04:00</div>
-                        <p class="status">Hover to start</p>
-                        <div class="side-duration">
-                            <input type="number" id="duration-a" value="4" min="1" max="60">
-                            <span>min</span>
+                    <div class="config-form">
+                        <div class="config-field">
+                            <label>正方：</label>
+                            <input type="text" id="config-pro" value="不应该" maxlength="20">
+                        </div>
+                        <div class="config-field">
+                            <label>反方：</label>
+                            <input type="text" id="config-con" value="应该" maxlength="20">
+                        </div>
+                        <div class="config-field">
+                            <label>时间：</label>
+                            <input type="number" id="config-time" value="4" min="1" max="60">
+                            <span class="unit">分钟</span>
                         </div>
                     </div>
+                    <div class="side left-side" id="side-a">
+                        <h3>不应该</h3>
+                        <div class="time-display" id="timer-a">04:00</div>
+                        <p class="status">Hover to start</p>
+                    </div>
                     <div class="side right-side" id="side-b">
-                        <h3 contenteditable="true" id="right-label">应该</h3>
+                        <h3>应该</h3>
                         <div class="time-display" id="timer-b">04:00</div>
                         <p class="status">Hover to start</p>
-                        <div class="side-duration">
-                            <input type="number" id="duration-b" value="4" min="1" max="60">
-                            <span>min</span>
-                        </div>
                     </div>
                 </div>
                 <div class="debate-footer">
