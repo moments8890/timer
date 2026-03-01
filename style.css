@@ -264,6 +264,24 @@ main {
     }
 }
 
+/* Landscape: hide header elements so the timer display has room */
+@media (max-height: 450px) and (orientation: landscape) {
+    .side-label,
+    .side-timer-input,
+    .keyboard-guide {
+        display: none;
+    }
+
+    .debate-side {
+        padding: 8px;
+    }
+
+    .status {
+        margin-top: 6px;
+        font-size: 0.9rem;
+    }
+}
+
 /* Touch tap affordance (from local) */
 @media (hover: none) and (pointer: coarse) {
     .debate-side {

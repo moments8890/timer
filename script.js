@@ -224,11 +224,12 @@ if (!isTouchDevice) {
     document.getElementById('free-debate').addEventListener('mouseleave', pauseDebateTimer);
 }
 
-// Click handlers — toggle pause on active side, start on inactive (works on touch + desktop)
+// Click handlers — click active running side to stop; click inactive/stopped side to start
 leftSide.addEventListener('click', () => {
     if (debateRunning && activeLeftSide) {
         pauseDebateTimer();
     } else {
+        pauseDebateTimer(); // stop any running timer before switching/starting
         activeLeftSide = true;
         updateDebateDisplay();
         startDebateTimer();
@@ -239,6 +240,7 @@ rightSide.addEventListener('click', () => {
     if (debateRunning && !activeLeftSide) {
         pauseDebateTimer();
     } else {
+        pauseDebateTimer(); // stop any running timer before switching/starting
         activeLeftSide = false;
         updateDebateDisplay();
         startDebateTimer();
