@@ -445,19 +445,39 @@ input[type="text"] {
         margin: 0 4px;
     }
 
+    /* Standard timer */
+    .timer-container h2 {
+        display: none; /* nav already shows active tab */
+    }
+
     .controls {
         display: flex;
-        flex-wrap: wrap;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
+        width: 90%;
+        max-width: 400px;
     }
 
     .controls button {
-        padding: 14px 22px;
-        font-size: 1.3em;
+        flex: 1;
+        padding: 18px 0;
+        font-size: 1.2em;
         margin: 0;
     }
 
+    .settings {
+        margin-top: 16px;
+        font-size: 1.1em;
+    }
+
+    input[type="number"] {
+        font-size: 1.1em;
+        padding: 10px;
+        width: 72px;
+        margin-left: 8px;
+    }
+
+    /* Free debate header */
     .debate-header {
         padding: 6px 8px;
     }
@@ -467,14 +487,9 @@ input[type="text"] {
         margin: 0 0 4px;
     }
 
-    /* Hide keyboard guide on touch devices */
+    /* Hide keyboard guide on mobile */
     .usage-guide {
         display: none;
-    }
-
-    .settings {
-        margin-top: 4px;
-        font-size: 0.85em;
     }
 
     .side h3 {
